@@ -44,6 +44,11 @@ class Evento{
         Evento(int _duracao){
             this->duracao = _duracao;
         }
+
+    public:
+        virtual void imprimir () = 0; // Método virtual puro obriga o programador a colocar métodos nas subclasses
+                                      // Método virtual tem uma mensagem genérica que aparece quando uma subclasse não tem um método espcífico definido
+                                      // Interface é quando as todas as superclasses utilizam método virtual puro.
 };
 
 class Roteiro : public Evento{
@@ -55,6 +60,11 @@ class Roteiro : public Evento{
             this->ordem = _ordem;
         }
 
+    public:
+        virtual void imprimir () {
+            std::cout << "----- Roteiro -----" << std::endl;
+            std::cout << "- Local: " << this->titulo << std::endl;
+        }
 };
 
 class Deslocamento : public Evento{
@@ -66,6 +76,12 @@ class Deslocamento : public Evento{
             this->destino = _destino;
         }
 
+    public:
+        virtual void imprimir () {
+            std::cout << "----- Deslocamento -----\n- Van coletiva" << std::endl;
+            std::cout << "- Origem: " << this->origem << std::endl;
+            std::cout << "- Destino: " << this->destino << std::endl;
+        }
 };
 
 class Pernoite : public Evento{
@@ -74,13 +90,17 @@ class Pernoite : public Evento{
         Pernoite(int _duracao,string _local=""):Evento(_duracao){
             this->local = _local;
         }
+
+        public:
+        virtual void imprimir () {
+            std::cout << "----- Pernoite -----\n- Hostel da Jô\n\n" << std::endl;
+        }
 };
 
 class Pacote{
-    private:
+    public:
         vector<Evento*> listaEventos;
     
-    public:
         Pacote(Evento *_evento){
             listaEventos.push_back(_evento);
         }
@@ -124,6 +144,12 @@ int main(){
     Pacote *bronze = new Pacote(r1); //polimorfismo
     bronze->inserirEvento(d1);
     bronze->inserirEvento(p1);
+
+    for(auto el : bronze->listaEventos) {
+        cout << endl;
+        el->imprimir();
+    }
+    
 
     Reserva *reserva01 = new Reserva(cli01,bronze);
     
